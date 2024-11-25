@@ -83,11 +83,25 @@ class _HomeViewState extends State<HomeView> {
     return Scaffold(
       body: BlocBuilder<HomeCubit, List<Product>>(
         builder: (context, productList) {
-          if (productList.isEmpty) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+          if (productList.isEmpty) { // Ortak Filtreleme sonucu ürün bulunamazsa
+            context.read<HomeCubit>().resetFilters(); // Listeyi eski haline getir
+
+            // Snackbar'ı mevcut frame tamamlandıktan sonra göster
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    "No products found",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  duration: Duration(seconds: 2),
+                  behavior: SnackBarBehavior.floating,
+                  margin: EdgeInsets.all(16),
+                ),
+              );
+            });
           }
+
 
           return Stack(
             children: [
