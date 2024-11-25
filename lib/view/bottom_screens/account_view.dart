@@ -48,6 +48,7 @@ class AccountView extends StatelessWidget {
 
                     return OrderCard(
                       order: order,
+                      orderNumber: index, // index değeri sıralama için kullanılıyor
                       onTap: () {
                         // OrderDetailView'e yönlendirme
                         Navigator.push(

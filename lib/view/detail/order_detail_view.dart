@@ -23,7 +23,7 @@ class OrderDetailView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Order #${order.id}"),
+        title: Text("Order Detail"),
         centerTitle: true,
         flexibleSpace: Container(
           decoration: const BoxDecoration(

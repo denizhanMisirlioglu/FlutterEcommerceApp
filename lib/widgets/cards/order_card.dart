@@ -4,11 +4,13 @@ import '../../model/order/order.dart';
 class OrderCard extends StatelessWidget {
   final Order order;
   final VoidCallback onTap;
+  final int orderNumber; // UI üzerindeki sıralama numarası
 
   const OrderCard({
     Key? key,
     required this.order,
     required this.onTap,
+    required this.orderNumber, // Yeni parametre
   }) : super(key: key);
 
   @override
@@ -32,7 +34,7 @@ class OrderCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Order #${order.id}",
+                      "Order #${orderNumber + 1}", // Kullanıcının sıralı sipariş numarası
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
