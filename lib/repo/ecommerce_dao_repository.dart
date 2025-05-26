@@ -67,7 +67,7 @@ class EcommerceDaoRepository {
       }
 
       if (existingItem != null) {
-        // Eğer ürün zaten varsa, sadece miktarı güncelle
+        // Eğer ürün zaten varsa, sadece miktarı güncelle ( sepete miktarı artmış şekilde ekle, öncekini sil)
         var updatedQuantity = existingItem.orderAmount + quantity;
         var url = '${baseUrl}sepeteUrunEkle.php';
         var data = {
@@ -144,7 +144,7 @@ class EcommerceDaoRepository {
     }
   }
 
-  /// Belirtilen bir ürünün tam URL'sini döndürür.
+  /// Belirtilen bir ürünün tam resim URL'sini döndürür.
   Future<String> getProductImage(String imageName) async {
     return "${baseUrl}resimler/$imageName";
   }

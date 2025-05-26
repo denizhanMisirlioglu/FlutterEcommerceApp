@@ -3,15 +3,15 @@ import 'package:lottie/lottie.dart';
 
 /// Lottie animasyon dosya yollarını tanımlayan enum
 enum LottieAnimations {
-  addFavorite('assets/lottie/1.json'), // Favorilere ekleme animasyonu
-  removeFavorite('assets/lottie/2.json'), // Favorilerden çıkarma animasyonu
-  addToCart('assets/lottie/3.json'), // Sepete ekleme animasyonu
-  loading('assets/lottie/4.json'), // Yükleniyor animasyonu
-  success('assets/lottie/5.json'), // Başarı animasyonu
-  removeBasketItem('assets/lottie/6.json'), // Sepetten ürün kaldırma animasyonu
-  loading2('assets/lottie/7.json'); // Alternatif yükleniyor animasyonu
+  addFavorite('assets/lottie/1.json'),       // Favorilere ekleme animasyonu
+  removeFavorite('assets/lottie/2.json'),    // Favorilerden çıkarma animasyonu
+  addToCart('assets/lottie/3.json'),         // Sepete ekleme animasyonu
+  loading('assets/lottie/4.json'),            // Yükleniyor animasyonu
+  success('assets/lottie/5.json'),            // Başarı animasyonu
+  removeBasketItem('assets/lottie/6.json'),  // Sepetten ürün kaldırma animasyonu
+  loading2('assets/lottie/7.json');           // Alternatif yükleniyor animasyonu
 
-  final String path; // Animasyon dosyasının yolu
+  final String path;
   const LottieAnimations(this.path);
 }
 
@@ -20,22 +20,19 @@ class LottieHelper {
   /// Lottie animasyonunu bir dialog içinde gösterir
   static void showAnimation({
     required BuildContext context,
-    required LottieAnimations animation, // Gösterilecek animasyon (enum)
-    double? width, // Animasyonun genişliği
-    double? height, // Animasyonun yüksekliği
-    Duration? duration, // Animasyon süresini özelleştirme
-    double speed = 1.0, // Animasyon hızı
-    bool isFullScreen = false, // Tam ekran modunda gösterme
-    VoidCallback? onComplete, // Animasyon tamamlandığında çağrılacak fonksiyon
+    required LottieAnimations animation,
+    double? width,
+    double? height,
+    Duration? duration,
+    double speed = 1.0,
+    bool isFullScreen = false,
+    VoidCallback? onComplete,
   }) {
-    // Context geçerli değilse işlem yapma
-    if (!context.mounted) {
-      return;
-    }
+    if (!context.mounted) return;
 
     showDialog(
       context: context,
-      barrierDismissible: false, // Dialog manuel olarak kapatılamaz
+      barrierDismissible: false,
       builder: (context) {
         return _LottieAnimationDialog(
           animation: animation,
@@ -51,15 +48,14 @@ class LottieHelper {
   }
 }
 
-/// Hız ve boyut özelleştirmesi ile Lottie animasyonlarını gösteren stateful widget
 class _LottieAnimationDialog extends StatefulWidget {
-  final LottieAnimations animation; // Gösterilecek animasyon
-  final double? width; // Animasyon genişliği
-  final double? height; // Animasyon yüksekliği
-  final Duration? duration; // Özelleştirilmiş animasyon süresi
-  final double speed; // Animasyon hızı
-  final bool isFullScreen; // Tam ekran modunda gösterme
-  final VoidCallback? onComplete; // Animasyon tamamlandığında çağrılacak fonksiyon
+  final LottieAnimations animation;
+  final double? width;
+  final double? height;
+  final Duration? duration;
+  final double speed;
+  final bool isFullScreen;
+  final VoidCallback? onComplete;
 
   const _LottieAnimationDialog({
     Key? key,
@@ -76,20 +72,19 @@ class _LottieAnimationDialog extends StatefulWidget {
   State<_LottieAnimationDialog> createState() => _LottieAnimationDialogState();
 }
 
-/// Lottie animasyonlarının oynatılmasını yöneten state sınıfı
 class _LottieAnimationDialogState extends State<_LottieAnimationDialog>
     with TickerProviderStateMixin {
-  late AnimationController _controller; // Animasyonu kontrol eden controller
+  late final AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this); // Animasyon controller'ı başlatılır
+    _controller = AnimationController(vsync: this);
   }
 
   @override
   void dispose() {
-    _controller.dispose(); // Animasyon controller'ı serbest bırakılır
+    _controller.dispose();
     super.dispose();
   }
 
@@ -97,20 +92,33 @@ class _LottieAnimationDialogState extends State<_LottieAnimationDialog>
   Widget build(BuildContext context) {
     return Center(
       child: Lottie.asset(
-        widget.animation.path, // Gösterilecek animasyonun yolu
-        controller: _controller, // Animasyon controller'ı
-        width: widget.width ?? (widget.isFullScreen ? MediaQuery.of(context).size.width : 150), // Dinamik genişlik
-        height: widget.height ?? (widget.isFullScreen ? MediaQuery.of(context).size.height : 150), // Dinamik yükseklik
+        widget.animation.path,
+        controller: _controller,
+        width: widget.width ??
+            (widget.isFullScreen
+                ? MediaQuery.of(context).size.width
+                : 150),
+        height: widget.height ??
+            (widget.isFullScreen
+                ? MediaQuery.of(context).size.height
+                : 150),
+
+        // Tüm text layer'larını boşaltarak animasyondaki yazıyı kaldırıyoruz
+        delegates: LottieDelegates(
+          text: (initialText) => '',
+        ),
+
         onLoaded: (composition) {
-          // Animasyon süresi hıza göre ayarlanır
           _controller.duration = Duration(
-            milliseconds: (widget.duration?.inMilliseconds ?? composition.duration.inMilliseconds ~/ widget.speed).toInt(),
+            milliseconds: (widget.duration?.inMilliseconds ??
+                (composition.duration.inMilliseconds ~/ widget.speed))
+                .toInt(),
           );
-          _controller.forward(); // Animasyon oynat
+          _controller.forward();
           _controller.addStatusListener((status) {
             if (status == AnimationStatus.completed) {
-              Navigator.of(context).pop(); // Animasyon tamamlandığında dialogu kapat
-              if (widget.onComplete != null) widget.onComplete!(); // Tamamlama fonksiyonunu çağır
+              Navigator.of(context).pop();
+              widget.onComplete?.call();
             }
           });
         },
