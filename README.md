@@ -3,3 +3,8 @@
 ## Full Demo
 
 ▶️ [Download the full demo video (1:12)](docs/full_demo.mp4)
+
+## Quick Demo (2× speed)
+
+![Quick Demo](assets/demo_fast.gif)
+
