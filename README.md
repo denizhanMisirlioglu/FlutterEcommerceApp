@@ -6,5 +6,6 @@
 
 ## Quick Demo (2× speed)
 
-![Quick Demo](assets/demo_fast.gif)
+![Quick Demo](docs/demo_fast.gif)
+
 
