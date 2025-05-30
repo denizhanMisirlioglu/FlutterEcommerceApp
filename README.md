@@ -62,8 +62,10 @@ A modern, fast, and scalable e-commerce application built with Flutter.
    git clone https://github.com/<your-username>/flutter_ecommerce_project.git
    cd flutter_ecommerce_project
 2. **Install dependencies**
+3. ```bash
    flutter pub get
-3. **Run the app**
+4. **Run the app**
+5. ```bash
    flutter run
 
 🤝 Contributors
